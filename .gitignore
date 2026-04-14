@@ -1,0 +1,10 @@
+.env
+SUMMARY.md
+.idea/
+debug.py
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+dist/
