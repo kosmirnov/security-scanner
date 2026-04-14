@@ -92,7 +92,7 @@ def test_github_token_detected():
 # --- Slack Token ---
 
 def test_slack_token_detected():
-    content = 'SLACK_TOKEN = "xoxb-123456789012-123456789012-abcdefghijklmnopqrstuvwx"'
+    content = 'SLACK_TOKEN = "xoxb-REDACTED-REDACTED-REDACTEDREDACTED"'
     findings = scan_content("auth.py", content)
     assert any(f.rule_id == "slack_token" for f in findings)
 

@@ -1,6 +1,6 @@
 import re
-from dataclasses import dataclass
 from typing import List
+from pydantic import BaseModel
 
 RULES = [
     {"id": "aws_access_key", "name": "AWS Access Key", "severity": "critical",
@@ -39,8 +39,7 @@ SKIP_EXTENSIONS = {".png", ".jpg", ".jpeg", ".gif", ".svg", ".ico", ".pdf",
 SKIP_DIRS = {".git", ".idea", "__pycache__", "node_modules", ".venv", "venv", ".env"}
 
 
-@dataclass
-class Finding:
+class Finding(BaseModel):
     rule_id: str
     rule_name: str
     severity: str

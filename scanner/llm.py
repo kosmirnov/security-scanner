@@ -1,9 +1,9 @@
 import json
 import os
 from typing import List
-from dataclasses import dataclass
 
 import anthropic
+from pydantic import BaseModel
 
 from scanner.rules import Finding
 
@@ -33,8 +33,14 @@ Rules:
 """
 
 
-@dataclass
-class VerifiedFinding:
+class LLMVerdict(BaseModel):
+    is_real: bool
+    confidence: str
+    explanation: str
+    fix: str
+
+
+class VerifiedFinding(BaseModel):
     finding: Finding
     is_real: bool
     confidence: str
@@ -89,8 +95,8 @@ def verify_findings(findings: List[Finding]) -> List[VerifiedFinding]:
         raw = raw.strip()
 
     try:
-        results = json.loads(raw)
-    except json.JSONDecodeError:
+        verdicts = [LLMVerdict(**r) for r in json.loads(raw)]
+    except Exception:
         # fallback: mark all as unverified
         return [
             VerifiedFinding(finding=f, is_real=True, confidence="low",
@@ -100,14 +106,14 @@ def verify_findings(findings: List[Finding]) -> List[VerifiedFinding]:
 
     verified = []
     for i, f in enumerate(findings):
-        if i < len(results):
-            r = results[i]
+        if i < len(verdicts):
+            v = verdicts[i]
             verified.append(VerifiedFinding(
                 finding=f,
-                is_real=r.get("is_real", True),
-                confidence=r.get("confidence", "low"),
-                explanation=r.get("explanation", ""),
-                fix=r.get("fix", ""),
+                is_real=v.is_real,
+                confidence=v.confidence,
+                explanation=v.explanation,
+                fix=v.fix,
             ))
         else:
             verified.append(VerifiedFinding(
