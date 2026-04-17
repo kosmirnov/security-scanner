@@ -2,10 +2,59 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Security Scanner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 60px auto;
+            padding: 0 20px;
+            background: #0f1117;
+            color: #e0e0e0;
+        }
+        h1 { color: #ff4b4b; }
+        p { color: #aaa; }
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            margin: 4px;
+        }
+        .critical { background: #ff4b4b; color: white; }
+        .high { background: #ff8c00; color: white; }
+        .medium { background: #ffd700; color: black; }
+        .low { background: #4b9fff; color: white; }
+    </style>
 </head>
 <body>
-    <h1>Security Scanner</h1>
-    <p>Hello — if you can see this, GitHub Pages is working!</p>
+    <h1>AI Security Scanner</h1>
+    <p>Scans a codebase for leaked secrets and insecure patterns using regex detection + LLM-powered false positive filtering.</p>
+
+    <h3>Detection Coverage</h3>
+    <span class="badge critical">AWS Keys</span>
+    <span class="badge critical">GitHub Tokens</span>
+    <span class="badge critical">Private Keys</span>
+    <span class="badge high">DB Credentials</span>
+    <span class="badge high">Slack Tokens</span>
+    <span class="badge high">Bearer Tokens</span>
+    <span class="badge medium">SSL verify=False</span>
+    <span class="badge medium">MD5 / SHA1</span>
+    <span class="badge medium">exec() calls</span>
+    <span class="badge low">Hardcoded IPs</span>
+
+    <h3>How It Works</h3>
+    <pre style="background:#1e1e2e; padding:16px; border-radius:8px; color:#cdd6f4;">
+Repo / Files
+    ↓
+Regex Scanner      — 14 rules, catches all candidates
+    ↓
+LLM Verifier       — Claude filters false positives, suggests fixes
+    ↓
+Report             — severity, verdict, confidence, fix
+    </pre>
+
+    <p style="margin-top:40px; color:#555; font-size:13px;">Built with Python · Anthropic Claude · Pydantic · FastAPI</p>
 </body>
 </html>
