@@ -36,6 +36,12 @@ uvicorn api:app --reload                  # start FastAPI server
 
 Frontend is hosted on Render. The FastAPI backend (`api.py`) is the service Render deploys. Environment variables (e.g. `ANTHROPIC_API_KEY`) are set in the Render dashboard, not in `.env`.
 
+## Before Every Code Change
+
+Before writing or editing any code, explain and summarize what you are about to do — pitched at a fluent Python developer. Cover: which files change, what the change does, and why. Wait for approval before proceeding.
+
+After every code change, ask the user 1-2 questions about the code just written — to prompt them to think about the design decisions and be able to defend them in an interview. Wait for their answers before moving on.
+
 ## Before Every Git Commit
 
 - Check for typos in any changed files (comments, strings, variable names)
@@ -49,6 +55,10 @@ When editing `docs/index.html`, always check for:
 - `</script>` appearing anywhere inside a `<script>` block (even in comments) — the HTML parser treats it as the real closing tag and everything after appears as visible page text. Escape it as `<\/script>` instead.
 - HTML special characters (`<`, `>`, `&`) in comments inside `<script>` — can confuse parsers or display incorrectly.
 - Any user-supplied or external data inserted into `innerHTML` must be passed through `escHtml()` to prevent XSS.
+
+## Design Philosophy
+
+Prefer simplicity over complexity. Avoid over-engineering — if a plain loop works, use it. Only introduce abstractions when there is a clear, demonstrable benefit.
 
 ## Conventions
 

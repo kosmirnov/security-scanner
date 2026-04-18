@@ -2,7 +2,7 @@ import re
 from typing import List
 from pydantic import BaseModel
 
-RULES = [
+SECRET_RULES = [
     {"id": "aws_access_key", "name": "AWS Access Key", "severity": "critical",
      "pattern": re.compile(r"(?<![A-Z0-9])(AKIA[0-9A-Z]{16})(?![A-Z0-9])")},
     {"id": "aws_secret_key", "name": "AWS Secret Key", "severity": "critical",
@@ -23,6 +23,9 @@ RULES = [
      "pattern": re.compile(r"gh[pousr]_[A-Za-z0-9]{36}")},
     {"id": "slack_token", "name": "Slack Token", "severity": "high",
      "pattern": re.compile(r"xox[baprs]-[0-9A-Za-z\-]{10,}")},
+]
+
+PATTERN_RULES = [
     {"id": "insecure_ssl", "name": "SSL Verification Disabled", "severity": "medium",
      "pattern": re.compile(r"verify\s*=\s*False")},
     {"id": "insecure_hash", "name": "Weak Hash (MD5/SHA1)", "severity": "medium",
@@ -32,6 +35,9 @@ RULES = [
     {"id": "hardcoded_ip", "name": "Hardcoded IP Address", "severity": "low",
      "pattern": re.compile(r"\b(?:(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\b")},
 ]
+
+# Combined list kept for backwards compatibility (api.py, tests)
+RULES = SECRET_RULES + PATTERN_RULES
 
 SKIP_EXTENSIONS = {".png", ".jpg", ".jpeg", ".gif", ".svg", ".ico", ".pdf",
                    ".zip", ".tar", ".gz", ".bin", ".exe", ".lock"}
@@ -49,11 +55,11 @@ class Finding(BaseModel):
     match: str
 
 
-def scan_content(file_path: str, content: str) -> List[Finding]:
+def scan_content(file_path: str, content: str, rules: list = RULES) -> List[Finding]:
     findings = []
     lines = content.splitlines()
     for line_num, line in enumerate(lines, start=1):
-        for rule in RULES:
+        for rule in rules:
             for m in rule["pattern"].finditer(line):
                 findings.append(Finding(
                     rule_id=rule["id"],

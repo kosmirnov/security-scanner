@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Security Scanner</title>
+    <title>Don't Vibe Code Please</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -149,13 +149,74 @@
             font-size: 0.8em;
             margin: 3px;
         }
+
+        .section-divider {
+            border: none;
+            border-top: 1px solid #333;
+            margin: 48px 0 40px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: #1e1e2e;
+            border: 1px solid #333;
+            border-radius: 6px;
+            color: #e0e0e0;
+            font-size: 0.85em;
+            font-family: monospace;
+            resize: vertical;
+            margin-bottom: 12px;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #ff4b4b;
+        }
+
+        .question-block {
+            margin-bottom: 20px;
+        }
+
+        .question-block p {
+            color: #e0e0e0;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        .question-block input[type="text"] {
+            width: 100%;
+        }
+
+        .verdict {
+            display: none;
+            padding: 16px 20px;
+            border-radius: 6px;
+            margin-top: 20px;
+            font-size: 0.95em;
+        }
+
+        .verdict.active { display: block; }
+        .verdict.approve { background: #1a3a1a; border: 1px solid #4caf50; color: #4caf50; }
+        .verdict.reject  { background: #3a1a1a; border: 1px solid #ff4b4b; color: #ff8080; }
+
+        .verdict .decision {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .verdict .feedback { color: #ccc; font-size: 0.9em; }
+
+        #questionsSection { display: none; margin-top: 24px; }
+        #questionsSection.active { display: block; }
     </style>
 </head>
 <body>
 <div class="container">
 
-    <h1>AI Security Scanner</h1>
-    <p class="subtitle">Scans a repository for leaked secrets and insecure patterns using regex detection + LLM-powered false positive filtering.</p>
+    <h1>Don't Vibe Code Please</h1>
+    <p class="subtitle">AI-powered security tools for developers who care about what they ship.</p>
 
     <div class="badges">
         <span class="badge critical">AWS Keys</span>
@@ -201,6 +262,50 @@
         </thead>
         <tbody id="resultsBody"></tbody>
     </table>
+
+    <!-- PR Code Review Agent section -->
+    <hr class="section-divider">
+
+    <h1>PR Code Review Agent</h1>
+    <p class="subtitle">Paste a git diff below. The agent will generate targeted questions about your changes — answer them to get your PR approved.</p>
+
+    <textarea id="diffInput" rows="12">diff --git a/api/client.py b/api/client.py
+index 3f2a1b4..8d9c2e7 100644
+--- a/api/client.py
++++ b/api/client.py
+@@ -1,10 +1,14 @@
+ import requests
++import hashlib
+
+ API_KEY = "sk-prod-9f8e7d6c5b4a3210feda"
++DB_PASSWORD = "SuperSecret123!"
+
+ def fetch_data(endpoint):
+-    response = requests.get(endpoint, verify=True)
++    # temporarily disabled for testing
++    response = requests.get(endpoint, verify=False)
+     return response.json()
+
++def hash_password(password):
++    return hashlib.md5(password.encode()).hexdigest()
+</textarea>
+
+    <div class="input-row">
+        <button id="reviewBtn" onclick="runReview()">Generate Questions</button>
+    </div>
+
+    <div class="spinner" id="reviewSpinner">⏳ Analysing diff...</div>
+    <div class="error" id="reviewError"></div>
+
+    <div id="questionsSection">
+        <div id="questionsContainer"></div>
+        <button id="verdictBtn" onclick="runVerdict()">Get Verdict</button>
+    </div>
+
+    <div class="verdict" id="verdictBox">
+        <div class="decision" id="verdictDecision"></div>
+        <div class="feedback" id="verdictFeedback"></div>
+    </div>
 
 </div>
 
@@ -446,6 +551,111 @@
             .replace(/</g, '&lt;')
             .replace(/>/g, '&gt;');
         // The /g flag means "replace ALL occurrences", not just the first one.
+    }
+
+    // stores the questions returned by step 1 so runVerdict() can access them
+    let currentQuestions = [];
+
+    async function runReview() {
+        const diff = document.getElementById('diffInput').value.trim();
+        const btn = document.getElementById('reviewBtn');
+        const spinner = document.getElementById('reviewSpinner');
+        const error = document.getElementById('reviewError');
+        const questionsSection = document.getElementById('questionsSection');
+        const questionsContainer = document.getElementById('questionsContainer');
+        const verdictBox = document.getElementById('verdictBox');
+
+        if (!diff) return;
+
+        // reset UI state
+        btn.disabled = true;
+        spinner.classList.add('active');
+        error.classList.remove('active');
+        questionsSection.classList.remove('active');
+        verdictBox.classList.remove('active');
+        questionsContainer.innerHTML = '';
+
+        try {
+            const response = await fetch('/review/questions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ diff })
+            });
+
+            if (!response.ok) {
+                const err = await response.json();
+                throw new Error(err.detail || 'Failed to generate questions');
+            }
+
+            const data = await response.json();
+            currentQuestions = data.questions;
+
+            // render one input box per question
+            currentQuestions.forEach((q, i) => {
+                const block = document.createElement('div');
+                block.className = 'question-block';
+                block.innerHTML = `
+                    <p><strong>Q${i + 1}:</strong> ${escHtml(q)}</p>
+                    <input type="text" id="answer_${i}" placeholder="Your answer..." />
+                `;
+                questionsContainer.appendChild(block);
+            });
+
+            questionsSection.classList.add('active');
+
+        } catch (e) {
+            error.textContent = '❌ Error: ' + e.message;
+            error.classList.add('active');
+        } finally {
+            btn.disabled = false;
+            spinner.classList.remove('active');
+        }
+    }
+
+    async function runVerdict() {
+        const diff = document.getElementById('diffInput').value.trim();
+        const btn = document.getElementById('verdictBtn');
+        const spinner = document.getElementById('reviewSpinner');
+        const error = document.getElementById('reviewError');
+        const verdictBox = document.getElementById('verdictBox');
+
+        // collect answers from the dynamically created input boxes
+        const answers = currentQuestions.map((_, i) =>
+            document.getElementById(`answer_${i}`).value.trim()
+        );
+
+        btn.disabled = true;
+        spinner.classList.add('active');
+        error.classList.remove('active');
+        verdictBox.classList.remove('active');
+
+        try {
+            const response = await fetch('/review/verdict', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ diff, questions: currentQuestions, answers })
+            });
+
+            if (!response.ok) {
+                const err = await response.json();
+                throw new Error(err.detail || 'Failed to get verdict');
+            }
+
+            const data = await response.json();
+            const isApprove = data.decision === 'APPROVE';
+
+            verdictBox.className = `verdict active ${isApprove ? 'approve' : 'reject'}`;
+            document.getElementById('verdictDecision').textContent =
+                isApprove ? '✓ APPROVED' : '✗ REQUEST CHANGES';
+            document.getElementById('verdictFeedback').textContent = data.feedback;
+
+        } catch (e) {
+            error.textContent = '❌ Error: ' + e.message;
+            error.classList.add('active');
+        } finally {
+            btn.disabled = false;
+            spinner.classList.remove('active');
+        }
     }
 </script>
 </body>

@@ -1,3 +1,6 @@
+import asyncio
+import subprocess
+
 import click
 from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn
@@ -6,6 +9,7 @@ from scanner.git import get_files
 from scanner.rules import scan_content
 from scanner.llm import verify_findings
 from scanner.report import print_report, save_json, save_excel
+from scanner.agents.pr_review_agent import generate_questions, generate_verdict
 
 console = Console()
 
@@ -66,3 +70,40 @@ def scan(target, output_json, output_excel, no_llm):
 
     if output_excel:
         save_excel(verified, output_excel)
+
+
+@cli.command()
+def review():
+    """Run a viva voce code review on the last commit — answer questions to approve the PR."""
+
+    # get the diff from the last commit
+    result = subprocess.run(["git", "diff", "HEAD~1"], capture_output=True, text=True)
+    diff = result.stdout.strip()
+
+    if not diff:
+        console.print("[yellow]No diff found. Make sure you have at least one commit.[/yellow]")
+        return
+
+    # generate questions from the diff
+    console.print("\n[bold cyan]Analysing your diff...[/bold cyan]")
+    questions = asyncio.run(generate_questions(diff))
+
+    # prompt the user to answer each question
+    answers = []
+    console.print("\n[bold yellow]Answer the following questions to get your PR approved:[/bold yellow]\n")
+    for i, question in enumerate(questions, start=1):
+        console.print(f"[bold]Q{i}:[/bold] {question}")
+        answer = click.prompt("Your answer")
+        answers.append(answer)
+        console.print()
+
+    # evaluate answers and return verdict
+    console.print("[bold cyan]Evaluating your answers...[/bold cyan]")
+    verdict = asyncio.run(generate_verdict(diff, questions, answers))
+
+    if verdict.decision == "APPROVE":
+        console.print(f"\n[bold green]✓ {verdict.decision}[/bold green]")
+    else:
+        console.print(f"\n[bold red]✗ {verdict.decision}[/bold red]")
+
+    console.print(f"[dim]{verdict.feedback}[/dim]")
