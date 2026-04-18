@@ -8,215 +8,313 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: #0f1117;
-            color: #e0e0e0;
-            padding: 40px 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #ededed;
+            min-height: 100vh;
         }
 
-        .container { max-width: 1100px; margin: 0 auto; }
-
-        h1 { color: #ff4b4b; font-size: 2em; margin-bottom: 6px; }
-        .subtitle { color: #888; margin-bottom: 32px; font-size: 0.95em; }
-
-        .input-row {
+        /* ── Top nav ── */
+        .nav {
+            border-bottom: 1px solid #1f1f1f;
+            padding: 0 40px;
             display: flex;
-            gap: 10px;
+            align-items: center;
+            gap: 32px;
+            height: 56px;
+        }
+
+        .nav-brand {
+            font-size: 0.95em;
+            font-weight: 600;
+            color: #ededed;
+            letter-spacing: -0.01em;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 4px;
+            height: 100%;
+        }
+
+        .tab {
+            display: flex;
+            align-items: center;
+            padding: 0 14px;
+            font-size: 0.875em;
+            color: #666;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: color 0.15s;
+            user-select: none;
+        }
+
+        .tab:hover { color: #ededed; }
+
+        .tab.active {
+            color: #ededed;
+            border-bottom-color: #ededed;
+        }
+
+        /* ── Page content ── */
+        .page { display: none; padding: 48px 40px; max-width: 1000px; margin: 0 auto; }
+        .page.active { display: block; }
+
+        h2 {
+            font-size: 1.4em;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            font-size: 0.875em;
+            color: #666;
+            margin-bottom: 32px;
+            line-height: 1.5;
+        }
+
+        /* ── Badges ── */
+        .badges { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 28px; }
+
+        .badge {
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            font-weight: 500;
+            border: 1px solid transparent;
+        }
+
+        .critical { background: rgba(255,75,75,0.1); border-color: rgba(255,75,75,0.3); color: #ff6b6b; }
+        .high     { background: rgba(255,140,0,0.1); border-color: rgba(255,140,0,0.3); color: #ff9d2e; }
+        .medium   { background: rgba(255,215,0,0.1); border-color: rgba(255,215,0,0.3); color: #f0c040; }
+        .low      { background: rgba(75,159,255,0.1); border-color: rgba(75,159,255,0.3); color: #6aabff; }
+
+        /* ── Inputs ── */
+        .input-row { display: flex; gap: 8px; margin-bottom: 12px; }
+
+        input[type="text"], textarea {
+            flex: 1;
+            padding: 10px 14px;
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 6px;
+            color: #ededed;
+            font-size: 0.875em;
+            font-family: inherit;
+            transition: border-color 0.15s;
+        }
+
+        textarea {
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.8em;
+            resize: vertical;
+            width: 100%;
             margin-bottom: 12px;
         }
 
-        input[type="text"] {
-            flex: 1;
-            padding: 12px 16px;
-            background: #1e1e2e;
-            border: 1px solid #333;
-            border-radius: 6px;
-            color: #e0e0e0;
-            font-size: 0.95em;
-        }
-
-        input[type="text"]:focus {
+        input[type="text"]:focus, textarea:focus {
             outline: none;
-            border-color: #ff4b4b;
+            border-color: #444;
         }
 
+        /* ── Buttons ── */
         button {
-            padding: 12px 28px;
-            background: #ff4b4b;
-            color: white;
+            padding: 10px 20px;
+            background: #ededed;
+            color: #0a0a0a;
             border: none;
             border-radius: 6px;
-            font-size: 0.95em;
+            font-size: 0.875em;
+            font-weight: 500;
             cursor: pointer;
             white-space: nowrap;
+            transition: background 0.15s;
         }
 
-        button:hover { background: #e03e3e; }
-        button:disabled { background: #555; cursor: not-allowed; }
+        button:hover { background: #d4d4d4; }
+        button:disabled { background: #222; color: #555; cursor: not-allowed; }
 
+        /* ── Toggle ── */
         .toggle {
             display: flex;
             align-items: center;
             gap: 8px;
-            color: #888;
-            font-size: 0.9em;
-            margin-bottom: 28px;
+            color: #555;
+            font-size: 0.825em;
+            margin-bottom: 24px;
         }
 
-        .spinner {
-            display: none;
-            color: #888;
-            margin: 20px 0;
-            font-size: 0.95em;
-        }
-
+        /* ── Spinner / error ── */
+        .spinner { display: none; color: #555; font-size: 0.825em; margin: 16px 0; }
         .spinner.active { display: block; }
 
         .error {
             display: none;
-            background: #3a1a1a;
-            border: 1px solid #ff4b4b;
+            background: rgba(255,75,75,0.06);
+            border: 1px solid rgba(255,75,75,0.2);
             color: #ff8080;
             padding: 12px 16px;
             border-radius: 6px;
-            margin: 16px 0;
+            font-size: 0.825em;
+            margin: 12px 0;
         }
-
         .error.active { display: block; }
 
-        .summary {
-            display: none;
-            margin: 20px 0 16px;
-            font-size: 0.95em;
-        }
-
+        /* ── Summary ── */
+        .summary { display: none; font-size: 0.825em; color: #666; margin: 16px 0 12px; }
         .summary.active { display: block; }
-        .summary .real { color: #ff4b4b; font-weight: bold; }
-        .summary .fp { color: #4caf50; font-weight: bold; }
+        .summary .real { color: #ff6b6b; font-weight: 600; }
+        .summary .fp   { color: #4caf50; font-weight: 600; }
 
-        table {
-            display: none;
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.85em;
-        }
-
+        /* ── Results table ── */
+        table { display: none; width: 100%; border-collapse: collapse; font-size: 0.8em; }
         table.active { display: table; }
 
         th {
-            background: #1e1e2e;
-            color: #888;
+            background: #111;
+            color: #444;
             text-align: left;
-            padding: 10px 12px;
-            border-bottom: 1px solid #333;
-            font-weight: 600;
-            text-transform: uppercase;
+            padding: 9px 12px;
+            border-bottom: 1px solid #1f1f1f;
+            font-weight: 500;
             font-size: 0.8em;
-            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
         }
 
         td {
             padding: 10px 12px;
-            border-bottom: 1px solid #1e1e2e;
+            border-bottom: 1px solid #111;
             vertical-align: top;
             max-width: 200px;
             word-break: break-word;
+            color: #ccc;
         }
 
-        tr:hover td { background: #1a1a2e; }
+        tr:hover td { background: #0f0f0f; }
 
         .sev {
             display: inline-block;
             padding: 2px 8px;
             border-radius: 4px;
-            font-weight: bold;
-            font-size: 0.85em;
-        }
-
-        .critical { background: #ff4b4b; color: white; }
-        .high { background: #ff8c00; color: white; }
-        .medium { background: #ffd700; color: black; }
-        .low { background: #4b9fff; color: white; }
-
-        .real-yes { color: #ff4b4b; font-weight: bold; }
-        .real-no { color: #4caf50; font-weight: bold; }
-
-        .badges { margin-bottom: 32px; }
-        .badge {
-            display: inline-block;
-            padding: 3px 10px;
-            border-radius: 4px;
+            font-weight: 600;
             font-size: 0.8em;
-            margin: 3px;
         }
 
-        .section-divider {
-            border: none;
-            border-top: 1px solid #333;
-            margin: 48px 0 40px;
-        }
+        .real-yes { color: #ff6b6b; font-weight: 600; }
+        .real-no  { color: #4caf50; font-weight: 600; }
 
-        textarea {
-            width: 100%;
-            padding: 12px 16px;
-            background: #1e1e2e;
-            border: 1px solid #333;
-            border-radius: 6px;
-            color: #e0e0e0;
-            font-size: 0.85em;
-            font-family: monospace;
-            resize: vertical;
-            margin-bottom: 12px;
-        }
-
-        textarea:focus {
-            outline: none;
-            border-color: #ff4b4b;
-        }
-
-        .question-block {
-            margin-bottom: 20px;
-        }
+        /* ── PR Review ── */
+        .question-block { margin-bottom: 20px; }
 
         .question-block p {
-            color: #e0e0e0;
+            font-size: 0.875em;
+            color: #ccc;
             margin-bottom: 8px;
-            font-size: 0.95em;
+            line-height: 1.5;
         }
 
-        .question-block input[type="text"] {
-            width: 100%;
-        }
-
-        .verdict {
-            display: none;
-            padding: 16px 20px;
-            border-radius: 6px;
-            margin-top: 20px;
-            font-size: 0.95em;
-        }
-
-        .verdict.active { display: block; }
-        .verdict.approve { background: #1a3a1a; border: 1px solid #4caf50; color: #4caf50; }
-        .verdict.reject  { background: #3a1a1a; border: 1px solid #ff4b4b; color: #ff8080; }
-
-        .verdict .decision {
-            font-size: 1.2em;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-
-        .verdict .feedback { color: #ccc; font-size: 0.9em; }
+        .question-block input[type="text"] { width: 100%; flex: none; }
 
         #questionsSection { display: none; margin-top: 24px; }
         #questionsSection.active { display: block; }
+
+        .verdict {
+            display: none;
+            margin-top: 24px;
+            border: 1px solid #1f1f1f;
+            border-radius: 8px;
+            overflow: hidden;
+            font-size: 0.875em;
+        }
+
+        .verdict.active { display: block; }
+
+        .verdict-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: #111;
+            border-bottom: 1px solid #1f1f1f;
+        }
+
+        .verdict-author {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .verdict-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #1f1f1f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1em;
+            flex-shrink: 0;
+        }
+
+        .verdict-name {
+            font-weight: 600;
+            color: #ededed;
+            font-size: 0.875em;
+        }
+
+        .verdict-label {
+            font-size: 0.75em;
+            color: #555;
+            margin-top: 1px;
+        }
+
+        .verdict-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        .verdict.approve .verdict-badge {
+            background: rgba(76,175,80,0.15);
+            border: 1px solid rgba(76,175,80,0.3);
+            color: #4caf50;
+        }
+
+        .verdict.reject .verdict-badge {
+            background: rgba(255,75,75,0.15);
+            border: 1px solid rgba(255,75,75,0.3);
+            color: #ff6b6b;
+        }
+
+        .verdict-body {
+            padding: 16px 20px;
+            background: #0d0d0d;
+            color: #aaa;
+            line-height: 1.7;
+            font-size: 0.875em;
+        }
     </style>
 </head>
 <body>
-<div class="container">
 
-    <h1>Don't Vibe Code Please</h1>
-    <p class="subtitle">AI-powered security tools for developers who care about what they ship.</p>
+<!-- ── Navigation ── -->
+<nav class="nav">
+    <span class="nav-brand">Don't Vibe Code Please</span>
+    <div class="nav-tabs">
+        <div class="tab active" onclick="switchTab('scanner', this)">Security Scanner</div>
+        <div class="tab" onclick="switchTab('review', this)">PR Review Agent</div>
+    </div>
+</nav>
+
+<!-- ── Security Scanner tab ── -->
+<div class="page active" id="tab-scanner">
+
+    <h2>Security Scanner</h2>
+    <p class="subtitle">Scans a repository for leaked secrets and insecure patterns using regex detection + LLM-powered false positive filtering.</p>
 
     <div class="badges">
         <span class="badge critical">AWS Keys</span>
@@ -232,18 +330,17 @@
     </div>
 
     <div class="input-row">
-        <input type="text" id="repoUrl" placeholder="https://github.com/org/repo or git@bitbucket.org:org/repo.git" />
+        <input type="text" id="repoUrl" placeholder="https://github.com/org/repo" />
         <button id="scanBtn" onclick="runScan()">Scan</button>
     </div>
 
     <div class="toggle">
         <input type="checkbox" id="useLlm" checked />
-        <label for="useLlm">Use LLM verification (Claude filters false positives and suggests fixes)</label>
+        <label for="useLlm">Use LLM verification — Claude filters false positives and suggests fixes</label>
     </div>
 
-    <div class="spinner" id="spinner">⏳ Scanning... this may take 15-30 seconds depending on repo size.</div>
+    <div class="spinner" id="spinner">Scanning… this may take 15–30 seconds depending on repo size.</div>
     <div class="error" id="error"></div>
-
     <div class="summary" id="summary"></div>
 
     <table id="resultsTable">
@@ -263,11 +360,13 @@
         <tbody id="resultsBody"></tbody>
     </table>
 
-    <!-- PR Code Review Agent section -->
-    <hr class="section-divider">
+</div>
 
-    <h1>PR Code Review Agent</h1>
-    <p class="subtitle">Paste a git diff below. The agent will generate targeted questions about your changes — answer them to get your PR approved.</p>
+<!-- ── PR Review Agent tab ── -->
+<div class="page" id="tab-review">
+
+    <h2>PR Review Agent</h2>
+    <p class="subtitle">Paste a git diff below. The agent generates targeted questions about your changes — answer them to get your PR approved.</p>
 
     <textarea id="diffInput" rows="12">diff --git a/api/client.py b/api/client.py
 index 3f2a1b4..8d9c2e7 100644
@@ -294,7 +393,7 @@ index 3f2a1b4..8d9c2e7 100644
         <button id="reviewBtn" onclick="runReview()">Generate Questions</button>
     </div>
 
-    <div class="spinner" id="reviewSpinner">⏳ Analysing diff...</div>
+    <div class="spinner" id="reviewSpinner">Analysing diff…</div>
     <div class="error" id="reviewError"></div>
 
     <div id="questionsSection">
@@ -303,277 +402,121 @@ index 3f2a1b4..8d9c2e7 100644
     </div>
 
     <div class="verdict" id="verdictBox">
-        <div class="decision" id="verdictDecision"></div>
-        <div class="feedback" id="verdictFeedback"></div>
+        <div class="verdict-header">
+            <div class="verdict-author">
+                <div class="verdict-avatar">🤖</div>
+                <div>
+                    <div class="verdict-name">PR Review Agent</div>
+                    <div class="verdict-label">reviewed just now</div>
+                </div>
+            </div>
+            <div class="verdict-badge" id="verdictDecision"></div>
+        </div>
+        <div class="verdict-body" id="verdictFeedback"></div>
     </div>
 
 </div>
 
 <script>
-    // =============================================================
-    // JAVASCRIPT BASICS — what is this file doing?
-    // =============================================================
-    // This <script> block is the "brain" of the page.
-    // HTML defines what elements exist on the page (buttons, inputs, tables).
-    // CSS defines how they look (colours, layout).
-    // JavaScript makes them interactive — it responds to clicks, talks to
-    // the server, and updates the page without refreshing it.
-    //
-    // HOW THE FRONTEND TALKS TO THE BACKEND:
-    // When the user clicks "Scan", JavaScript sends an HTTP request to the
-    // Python FastAPI server running behind the scenes. The server does the
-    // heavy lifting (clones the repo, runs regex, calls Claude), then sends
-    // back a JSON response. JavaScript reads that JSON and builds the table.
-    //
-    // This pattern — browser sends request, server processes, browser
-    // renders the result — is the foundation of almost every web app.
-    // =============================================================
+    // ── Tab switching ──
+    function switchTab(name, el) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.getElementById('tab-' + name).classList.add('active');
+        el.classList.add('active');
+    }
 
-
-    // -------------------------------------------------------------
-    // MAIN FUNCTION: runScan()
-    // -------------------------------------------------------------
-    // "async" means this function can pause and wait for slow things
-    // (like a network request) without freezing the whole browser tab.
-    // It is wired up to the Scan button via onclick="runScan()" in the HTML.
-    // -------------------------------------------------------------
+    // ── Security Scanner ──
     async function runScan() {
-
-        // -------------------------------------------------------------
-        // STEP 1 — Read the values the user entered in the form
-        // -------------------------------------------------------------
-
-        // document.getElementById() finds an HTML element by its id="..." attribute.
-        // .value gets whatever text the user typed into that input box.
-        // .trim() removes any accidental spaces at the start or end.
-        const url = document.getElementById('repoUrl').value.trim();
-
-        // A checkbox element has a .checked property — true if ticked, false if not.
+        const url    = document.getElementById('repoUrl').value.trim();
         const useLlm = document.getElementById('useLlm').checked;
+        const btn     = document.getElementById('scanBtn');
+        const spinner = document.getElementById('spinner');
+        const error   = document.getElementById('error');
+        const summary = document.getElementById('summary');
+        const table   = document.getElementById('resultsTable');
+        const body    = document.getElementById('resultsBody');
 
-
-        // -------------------------------------------------------------
-        // STEP 2 — Get references to all the UI elements we'll need
-        // -------------------------------------------------------------
-        // We store these in variables now so we can reuse them below
-        // without calling getElementById() repeatedly.
-
-        const btn     = document.getElementById('scanBtn');      // the Scan button
-        const spinner = document.getElementById('spinner');      // the "scanning..." loading message
-        const error   = document.getElementById('error');        // the red error box
-        const summary = document.getElementById('summary');      // the "X real, Y false positives" line
-        const table   = document.getElementById('resultsTable'); // the results table
-        const body    = document.getElementById('resultsBody');  // the <tbody> that holds the table rows
-
-
-        // -------------------------------------------------------------
-        // STEP 3 — Guard: do nothing if the input box is empty
-        // -------------------------------------------------------------
-        // "return" exits the function immediately — nothing below runs.
         if (!url) return;
 
-
-        // -------------------------------------------------------------
-        // STEP 4 — Reset the UI before starting a new scan
-        // -------------------------------------------------------------
-        // If the user scans twice in a row, we need to clear the old results
-        // and show the loading state again.
-
-        // Disabling the button prevents the user clicking Scan a second time
-        // while a scan is already running.
         btn.disabled = true;
-
-        // classList lets us add or remove CSS class names on an element.
-        // The CSS file has a rule: .spinner { display: none } and
-        // .spinner.active { display: block }
-        // So adding the class "active" makes the spinner visible.
         spinner.classList.add('active');
-
-        // Removing "active" hides these elements (they were visible from a previous scan).
         error.classList.remove('active');
         summary.classList.remove('active');
         table.classList.remove('active');
-
-        // .innerHTML = '' deletes all the <tr> rows inside the table body,
-        // so old results don't show through while the new scan loads.
         body.innerHTML = '';
 
-
-        // -------------------------------------------------------------
-        // STEP 5 — Send the request to the backend and handle the response
-        // -------------------------------------------------------------
-        // try/catch/finally is JavaScript's error handling pattern:
-        //   try     — run this code; if anything throws an error, jump to catch
-        //   catch   — handle the error (show a message, don't crash the page)
-        //   finally — always run this, whether it succeeded or failed
         try {
-
-            // fetch() sends an HTTP request — just like typing a URL in your browser,
-            // but from code. This calls the POST /scan endpoint on the FastAPI server.
-            //
-            // "await" pauses here until the server responds. Without await, the code
-            // would keep running before the response arrived (which would break everything).
-            // await only works inside an async function — that's why runScan is async.
-            //
-            // We send:
-            //   method: 'POST'       — POST means we're sending data (vs GET which just fetches)
-            //   Content-Type: json   — tells the server the body is JSON, not a form
-            //   body: JSON string    — the actual data: the repo URL and the LLM toggle
-            //
-            // JSON.stringify() converts a JavaScript object like { url: "...", use_llm: true }
-            // into a JSON string like '{"url":"...","use_llm":true}' that can be sent over the wire.
             const response = await fetch('/scan', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ url, use_llm: useLlm })
             });
 
-            // response.ok is true for HTTP status codes 200-299 (success).
-            // If the server returned 400 (bad request) or 500 (server error), ok is false.
-            // For example, FastAPI returns 400 if the repo URL is invalid or can't be cloned.
             if (!response.ok) {
-                // response.json() reads the response body and parses it as JSON.
-                // FastAPI error responses look like: { "detail": "Could not clone repo" }
                 const err = await response.json();
-
-                // throw creates an Error object and jumps straight to the catch block below.
-                // The || means: use err.detail if it exists, otherwise use a generic message.
                 throw new Error(err.detail || 'Scan failed');
             }
 
-            // If we get here, the scan succeeded. Parse the response body as JSON.
-            // The server returns an object shaped like:
-            //   {
-            //     findings: [ { severity, file, line, rule, match, is_real, confidence, explanation, fix }, ... ],
-            //     summary:  { total, real, false_positives }
-            //   }
             const data = await response.json();
 
-
-            // -------------------------------------------------------------
-            // STEP 6 — Show the summary line
-            // -------------------------------------------------------------
-            // Template literals (backtick strings) let you embed variables directly
-            // inside a string using ${ }. This builds an HTML string with the counts.
             summary.innerHTML = `
-                <strong>${data.summary.total}</strong> findings total —
+                <strong>${data.summary.total}</strong> findings —
                 <span class="real">${data.summary.real} real</span>,
                 <span class="fp">${data.summary.false_positives} false positives</span>
             `;
-            summary.classList.add('active'); // make the summary div visible
-
-
-            // -------------------------------------------------------------
-            // STEP 7 — Handle zero findings vs findings found
-            // -------------------------------------------------------------
+            summary.classList.add('active');
 
             if (data.findings.length === 0) {
-                // .length is the number of items in an array.
-                // If the array is empty, replace the summary with a clean message.
-                summary.innerHTML = '✅ No findings detected. Your repo looks clean!';
-
+                summary.innerHTML = '✓ No findings detected. Your repo looks clean.';
             } else {
-
-                // forEach() loops through every item in the array.
-                // For each finding (we call it "f"), we create one table row.
                 data.findings.forEach(f => {
-
-                    // document.createElement('tr') creates a new <tr> (table row) element
-                    // in memory — it's not on the page yet, just held in the variable "row".
                     const row = document.createElement('tr');
-
-                    // Setting .innerHTML fills the row with HTML.
-                    // We use escHtml() on user-supplied text (match, explanation, fix) to
-                    // prevent XSS — see the escHtml() function below for why this matters.
-                    //
-                    // The ternary operator condition ? valueIfTrue : valueIfFalse is a
-                    // one-line if/else. So:
-                    //   f.is_real ? 'real-yes' : 'real-no'
-                    // means: if is_real is true use class "real-yes", otherwise "real-no".
                     row.innerHTML = `
                         <td><span class="sev ${f.severity}">${f.severity.toUpperCase()}</span></td>
-                        <td>${f.file}</td>
+                        <td>${escHtml(f.file)}</td>
                         <td>${f.line}</td>
-                        <td>${f.rule}</td>
+                        <td>${escHtml(f.rule)}</td>
                         <td><code>${escHtml(f.match)}</code></td>
                         <td class="${f.is_real ? 'real-yes' : 'real-no'}">${f.is_real ? 'YES' : 'NO'}</td>
-                        <td>${f.confidence}</td>
+                        <td>${escHtml(f.confidence)}</td>
                         <td>${escHtml(f.explanation)}</td>
                         <td>${escHtml(f.fix)}</td>
                     `;
-
-                    // appendChild() adds the row we just built into the table body on the pagok e.
-                    // This is what actually makes it appear in the browser.
                     body.appendChild(row);
                 });
-
-                // Now that the rows are added, make the table visible.
                 table.classList.add('active');
             }
 
         } catch (e) {
-            // If anything in the try block threw an error, we end up here.
-            // "e" is the Error object — e.message is the human-readable description.
-            // We display it in the red error box by setting its text and making it visible.
-            error.textContent = '❌ Error: ' + e.message;
+            error.textContent = 'Error: ' + e.message;
             error.classList.add('active');
-
         } finally {
-            // finally always runs — after try succeeds OR after catch handles an error.
-            // We use it to clean up the loading state regardless of outcome.
-            btn.disabled = false;               // re-enable the Scan button
-            spinner.classList.remove('active'); // hide the loading spinner
+            btn.disabled = false;
+            spinner.classList.remove('active');
         }
     }
 
-
-    // -------------------------------------------------------------
-    // HELPER FUNCTION: escHtml()
-    // -------------------------------------------------------------
-    // WHY THIS EXISTS — XSS (Cross-Site Scripting) prevention:
-    // If a scanned repo contains a string like <script>alert('hacked')<\/script>
-    // and we insert it directly into innerHTML, the browser would execute it as
-    // real JavaScript — a serious security vulnerability.
-    //
-    // escHtml() replaces the special HTML characters with safe "escape codes"
-    // so the browser displays them as plain text instead of executing them:
-    //   &  →  &amp;
-    //   <  →  &lt;   (lt = less than)
-    //   >  →  &gt;   (gt = greater than)
-    //
-    // Always escape user-supplied or external data before inserting into the DOM.
-    // -------------------------------------------------------------
-    function escHtml(str) {
-        // If the string is empty, null, or undefined — return an empty string.
-        if (!str) return '';
-        return str
-            .replace(/&/g, '&amp;')   // must be first — otherwise we'd double-escape the & we add below
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;');
-        // The /g flag means "replace ALL occurrences", not just the first one.
-    }
-
-    // stores the questions returned by step 1 so runVerdict() can access them
+    // ── PR Review Agent ──
     let currentQuestions = [];
 
     async function runReview() {
-        const diff = document.getElementById('diffInput').value.trim();
-        const btn = document.getElementById('reviewBtn');
+        const diff    = document.getElementById('diffInput').value.trim();
+        const btn     = document.getElementById('reviewBtn');
         const spinner = document.getElementById('reviewSpinner');
-        const error = document.getElementById('reviewError');
-        const questionsSection = document.getElementById('questionsSection');
-        const questionsContainer = document.getElementById('questionsContainer');
+        const error   = document.getElementById('reviewError');
+        const section = document.getElementById('questionsSection');
+        const container = document.getElementById('questionsContainer');
         const verdictBox = document.getElementById('verdictBox');
 
         if (!diff) return;
 
-        // reset UI state
         btn.disabled = true;
         spinner.classList.add('active');
         error.classList.remove('active');
-        questionsSection.classList.remove('active');
+        section.classList.remove('active');
         verdictBox.classList.remove('active');
-        questionsContainer.innerHTML = '';
+        container.innerHTML = '';
 
         try {
             const response = await fetch('/review/questions', {
@@ -590,21 +533,20 @@ index 3f2a1b4..8d9c2e7 100644
             const data = await response.json();
             currentQuestions = data.questions;
 
-            // render one input box per question
             currentQuestions.forEach((q, i) => {
                 const block = document.createElement('div');
                 block.className = 'question-block';
                 block.innerHTML = `
                     <p><strong>Q${i + 1}:</strong> ${escHtml(q)}</p>
-                    <input type="text" id="answer_${i}" placeholder="Your answer..." />
+                    <input type="text" id="answer_${i}" placeholder="Your answer…" />
                 `;
-                questionsContainer.appendChild(block);
+                container.appendChild(block);
             });
 
-            questionsSection.classList.add('active');
+            section.classList.add('active');
 
         } catch (e) {
-            error.textContent = '❌ Error: ' + e.message;
+            error.textContent = 'Error: ' + e.message;
             error.classList.add('active');
         } finally {
             btn.disabled = false;
@@ -613,13 +555,12 @@ index 3f2a1b4..8d9c2e7 100644
     }
 
     async function runVerdict() {
-        const diff = document.getElementById('diffInput').value.trim();
-        const btn = document.getElementById('verdictBtn');
+        const diff    = document.getElementById('diffInput').value.trim();
+        const btn     = document.getElementById('verdictBtn');
         const spinner = document.getElementById('reviewSpinner');
-        const error = document.getElementById('reviewError');
+        const error   = document.getElementById('reviewError');
         const verdictBox = document.getElementById('verdictBox');
 
-        // collect answers from the dynamically created input boxes
         const answers = currentQuestions.map((_, i) =>
             document.getElementById(`answer_${i}`).value.trim()
         );
@@ -646,16 +587,37 @@ index 3f2a1b4..8d9c2e7 100644
 
             verdictBox.className = `verdict active ${isApprove ? 'approve' : 'reject'}`;
             document.getElementById('verdictDecision').textContent =
-                isApprove ? '✓ APPROVED' : '✗ REQUEST CHANGES';
-            document.getElementById('verdictFeedback').textContent = data.feedback;
+                isApprove ? '✓ Approved' : '✗ Request Changes';
+            document.getElementById('verdictFeedback').innerHTML = formatFeedback(data.feedback);
 
         } catch (e) {
-            error.textContent = '❌ Error: ' + e.message;
+            error.textContent = 'Error: ' + e.message;
             error.classList.add('active');
         } finally {
             btn.disabled = false;
             spinner.classList.remove('active');
         }
+    }
+
+    // ── XSS prevention ──
+    function escHtml(str) {
+        if (!str) return '';
+        return str
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+    }
+
+    // ── Render LLM feedback: converts **bold** and numbered lists to HTML ──
+    function formatFeedback(str) {
+        if (!str) return '';
+        return escHtml(str)
+            // **bold** → <strong>bold</strong>
+            .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+            // numbered list items (1. 2. 3.) → new line with spacing
+            .replace(/(\d+\.\s)/g, '<br><br><strong>$1</strong>')
+            // trim leading <br> tags
+            .replace(/^(<br>)+/, '');
     }
 </script>
 </body>
