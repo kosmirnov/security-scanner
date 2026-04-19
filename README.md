@@ -1,25 +1,42 @@
 # Security Scanner
 
-A CLI tool that scans a repository for security vulnerabilities — leaked API keys, hardcoded secrets, and insecure code patterns. It uses a two-stage approach: fast regex detection followed by LLM-powered false positive filtering via Claude.
+A CLI + web tool with two pipelines, both powered by Claude.
 
 ---
 
 ## How It Works
 
+**Scan Pipeline**
 ```
 Local repo / Git URL
         ↓
   File Walker (git.py)
         ↓
-  Regex Scanner (rules.py)    ← catches all candidates
+  Regex Scanner (rules.py)    ← 6 rules, catches all candidates
         ↓
-  LLM Verifier (llm.py)       ← filters false positives, suggests fixes
+  LLM Verifier (llm.py)       ← Claude filters false positives, suggests fixes
         ↓
   Report (report.py)          ← terminal table + JSON + Excel
 ```
 
 **Why two stages?**
-Regex alone is fast but produces false positives — it flags `password = "your_password_here"` in docs the same as a real credential. The LLM understands context and filters these out, only surfacing real issues.
+Regex alone is fast but produces false positives — it flags `password = "your_password_here"` in docs the same as a real credential. Claude understands context and filters these out, only surfacing real issues.
+
+**PR Review Pipeline**
+```
+Git Diff
+        ↓
+  questions_agent (Claude)    ← generates 2–3 targeted questions
+        ↓
+  Developer answers live
+        ↓
+  verdict_agent (Claude)      ← evaluates answers
+        ↓
+  APPROVE / REQUEST CHANGES
+```
+
+**Why the Q&A step?**
+A diff alone doesn't prove understanding. The viva voce forces the developer to explain the security implications of their own changes before the PR is approved.
 
 ---
 
