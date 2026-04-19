@@ -68,19 +68,11 @@ python main.py scan ./my-repo --no-llm
 | Severity | Rule | What It Catches |
 |---|---|---|
 | Critical | AWS Access Key | Keys starting with `AKIA...` |
-| Critical | AWS Secret Key | 40-char random strings near "aws" |
-| Critical | Private Key | PEM private key headers |
 | Critical | GitHub Token | Tokens starting with `ghp_`, `gho_`, etc. |
-| High | GCP API Key | Google Cloud keys starting with `AIza...` |
-| High | Generic API Key | Any `api_key = "long_value"` |
 | High | Generic Secret | Any `password =`, `secret =`, `pwd =` with a value |
 | High | DB Connection String | DB URLs with credentials e.g. `postgres://user:pass@host` |
-| High | Bearer Token | Hardcoded `Bearer xxxxx` auth headers |
-| High | Slack Token | Slack tokens starting with `xox...` |
 | Medium | SSL Verification Disabled | `verify=False` in HTTP requests |
-| Medium | Weak Hash | `hashlib.md5()` or `hashlib.sha1()` |
 | Medium | Dynamic exec() | `exec()` calls that could allow code injection |
-| Low | Hardcoded IP Address | Raw IP addresses hardcoded in source |
 
 ---
 
@@ -94,19 +86,38 @@ python main.py scan ./my-repo --no-llm
 
 ---
 
+## PR Review Agent
+
+A viva voce code review flow — answer questions about your own diff to get it approved.
+
+```bash
+python main.py review
+```
+
+The agent reads your last commit diff, generates 2–3 targeted questions about the security implications and design decisions, and returns `APPROVE` or `REQUEST CHANGES` based on your answers.
+
+Also available via the web UI (`PR Review Agent` tab) and API endpoints `POST /review/questions` and `POST /review/verdict`.
+
+---
+
 ## Project Structure
 
 ```
 security-scanner/
 ├── main.py              ← entry point, loads .env
+├── api.py               ← FastAPI web server (POST /scan, POST /review/*)
 ├── requirements.txt
 ├── .env                 ← your API key (never commit this)
+├── docs/
+│   └── index.html       ← web UI served at /
 └── scanner/
     ├── cli.py           ← click CLI, orchestrates the pipeline
     ├── git.py           ← walks local repo or clones remote URL
-    ├── rules.py         ← regex detection rules + Finding dataclass
-    ├── llm.py           ← Claude verification + VerifiedFinding
-    └── report.py        ← rich terminal table + JSON + Excel output
+    ├── rules.py         ← regex detection rules + Finding model
+    ├── llm.py           ← Claude verification + VerifiedFinding model
+    ├── report.py        ← rich terminal table + JSON + Excel output
+    └── agents/
+        └── pr_review_agent.py  ← PydanticAI questions + verdict agents
 ```
 
 ---
