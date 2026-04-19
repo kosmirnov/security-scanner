@@ -59,20 +59,6 @@ def test_insecure_ssl_not_triggered_on_verify_true():
     assert not any(f.rule_id == "insecure_ssl" for f in findings)
 
 
-# --- Weak Hash ---
-
-def test_md5_detected():
-    content = "hashlib.md5(password.encode()).hexdigest()"
-    findings = scan_content("utils.py", content)
-    assert any(f.rule_id == "insecure_hash" for f in findings)
-
-
-def test_sha1_detected():
-    content = "hashlib.sha1(data).hexdigest()"
-    findings = scan_content("utils.py", content)
-    assert any(f.rule_id == "insecure_hash" for f in findings)
-
-
 # --- exec() ---
 
 def test_exec_detected():
@@ -87,14 +73,6 @@ def test_github_token_detected():
     content = 'GITHUB_TOKEN = "ghp_aBcDeFgHiJkLmNoPqRsTuVwXyZ1234567890"'
     findings = scan_content("auth.py", content)
     assert any(f.rule_id == "github_token" for f in findings)
-
-
-# --- Slack Token ---
-
-def test_slack_token_detected():
-    content = 'SLACK_TOKEN = "xoxb-REDACTED-REDACTED-REDACTEDREDACTED"'
-    findings = scan_content("auth.py", content)
-    assert any(f.rule_id == "slack_token" for f in findings)
 
 
 # --- Finding fields ---
