@@ -332,15 +332,24 @@
         }
         .intro p {
             font-size: 0.875em;
-            color: #555;
+            color: #888;
             line-height: 1.7;
             max-width: 800px;
         }
         .intro .stack {
-            margin-top: 8px;
+            margin-top: 10px;
             font-size: 0.75em;
-            color: #333;
-            letter-spacing: 0.02em;
+            color: #444;
+            letter-spacing: 0.04em;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+        }
+        .intro .stack span {
+            display: inline-block;
+            padding: 2px 8px;
+            border: 1px solid #222;
+            border-radius: 4px;
+            margin-right: 4px;
+            color: #666;
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
@@ -360,7 +369,9 @@
 <!-- ── Intro ── -->
 <div class="intro">
     <p>AI coding tools are making developers faster but creating a new risk — code gets shipped without genuine understanding. This is a PoC of a tool that sits in the developer workflow to make sure developers can explain their own changes before anyone else has to review them. The PR Review Agent is designed as a CI gate: it generates targeted questions about a git diff and only approves the PR once the answers show genuine understanding.</p>
-    <p class="stack">Python · FastAPI · Claude (Anthropic) · PydanticAI · Regex pipeline</p>
+    <p class="stack">
+        <span>Python</span><span>FastAPI</span><span>Claude (Anthropic)</span><span>PydanticAI</span><span>Regex pipeline</span>
+    </p>
 </div>
 
 <!-- ── Security Scanner tab ── -->
