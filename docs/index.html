@@ -393,25 +393,29 @@
     <h2>PR Review Agent</h2>
     <p class="subtitle">Paste a git diff below. The agent generates targeted questions about your changes — answer them to get your PR approved.</p>
 
-    <textarea id="diffInput" rows="12">diff --git a/api/client.py b/api/client.py
-index 3f2a1b4..8d9c2e7 100644
---- a/api/client.py
-+++ b/api/client.py
-@@ -1,10 +1,14 @@
- import requests
-+import hashlib
+    <textarea id="diffInput" rows="12">diff --git a/pipeline/transform.py b/pipeline/transform.py
+--- a/pipeline/transform.py
++++ b/pipeline/transform.py
+@@ -1,10 +1,22 @@
+ import pandas as pd
++import requests
 
- API_KEY = "sk-prod-9f8e7d6c5b4a3210feda"
-+DB_PASSWORD = "SuperSecret123!"
+-def merge_data(customers, orders):
+-    return customers.merge(orders, on="customer_id")
++API_KEY = "sk-prod-9f8e7d6c5b4a3210feda"
 
- def fetch_data(endpoint):
--    response = requests.get(endpoint, verify=True)
-+    # temporarily disabled for testing
++def fetch_orders(endpoint):
 +    response = requests.get(endpoint, verify=False)
-     return response.json()
++    return pd.DataFrame(response.json())
 
-+def hash_password(password):
-+    return hashlib.md5(password.encode()).hexdigest()
++def merge_data(customers, orders):
++    merged = customers.merge(orders, on="customer_id", how="left")
++    return merged
+
++def high_value_customers(df):
++    for _, row in df.iterrows():
++        if row["total_spend"] > 10000:
++            yield row["customer_id"], row["total_spend"]
 </textarea>
 
     <div class="input-row">
