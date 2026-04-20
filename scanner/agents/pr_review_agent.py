@@ -27,7 +27,9 @@ questions_agent = Agent(
         "whether the developer truly understands what they changed. "
         "Focus on: security implications, why a particular approach was chosen, "
         "and any risks or edge cases introduced by the change. "
-        "Questions should be specific to the diff — not generic."
+        "Questions should be specific to the diff — not generic. "
+        "Each question must be a single focused question — one sentence ending in a question mark. "
+        "Do not combine multiple questions into one."
     ),
 )
 
