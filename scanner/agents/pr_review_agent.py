@@ -46,7 +46,9 @@ verdict_agent = Agent(
         "Decide whether the answers demonstrate genuine understanding of the changes. "
         "Be strict: vague or incorrect answers should result in REQUEST CHANGES. "
         "APPROVE only if the developer clearly understands the security implications and reasoning "
-        "behind their changes."
+        "behind their changes. "
+        "Structure your feedback as bullet points — one bullet per question, starting each with '- '. "
+        "Keep each bullet concise: state whether the answer was correct and why."
     ),
 )
 

@@ -298,6 +298,10 @@
             line-height: 1.7;
             font-size: 0.875em;
         }
+        .verdict-body ul { margin: 0; padding: 0; list-style: none; }
+        .verdict-body li { padding: 4px 0; border-bottom: 1px solid #1a1a1a; }
+        .verdict-body li:last-child { border-bottom: none; }
+        .verdict-body li::before { content: "– "; color: #444; }
 
         /* ── Architecture ── */
         .arch-label {
@@ -708,16 +712,25 @@ flowchart LR
             .replace(/>/g, '&gt;');
     }
 
-    // ── Render LLM feedback: converts **bold** and numbered lists to HTML ──
+    // ── Render LLM feedback: converts bullet points and **bold** to HTML ──
     function formatFeedback(str) {
         if (!str) return '';
-        return escHtml(str)
-            // **bold** → <strong>bold</strong>
-            .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-            // numbered list items (1. 2. 3.) → new line with spacing
-            .replace(/(\d+\.\s)/g, '<br><br><strong>$1</strong>')
-            // trim leading <br> tags
-            .replace(/^(<br>)+/, '');
+        const lines = str.split('\n');
+        let html = '';
+        let inList = false;
+
+        for (const line of lines) {
+            const trimmed = line.trim();
+            if (trimmed.startsWith('- ') || trimmed.startsWith('• ')) {
+                if (!inList) { html += '<ul>'; inList = true; }
+                html += '<li>' + escHtml(trimmed.slice(2)).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') + '</li>';
+            } else {
+                if (inList) { html += '</ul>'; inList = false; }
+                if (trimmed) html += '<p>' + escHtml(trimmed).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') + '</p>';
+            }
+        }
+        if (inList) html += '</ul>';
+        return html;
     }
 </script>
 </body>
