@@ -482,7 +482,7 @@
     <h2>Architecture</h2>
 
     <div class="intro">
-        <p>AI coding tools are making developers faster but creating a new risk — code gets shipped without genuine understanding. This is a PoC of a tool that sits in the developer workflow to make sure developers can explain their own changes before anyone else has to review them. The PR Review Agent is designed as a CI gate: it generates targeted questions about a git diff and only approves the PR once the answers show genuine understanding.</p>
+        <p>AI coding tools are making developers faster but creating a new risk — code gets shipped without genuine understanding. This is a PoC with two tools: a Security Scanner that detects leaked secrets and insecure patterns using regex detection and LLM verification, and a PR Review Agent designed as a CI gate that generates targeted questions about a git diff and only approves the PR once the answers show genuine understanding.</p>
         <p class="stack">
             <span>Python</span><span>FastAPI</span><span>Claude (Anthropic)</span><span>PydanticAI</span><span>Regex pipeline</span>
         </p>
