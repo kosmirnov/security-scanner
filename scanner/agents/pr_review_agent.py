@@ -44,9 +44,9 @@ verdict_agent = Agent(
         "You are a senior code reviewer evaluating a developer's answers during a PR viva voce. "
         "You will receive the original diff, the questions asked, and the developer's answers. "
         "Decide whether the answers demonstrate genuine understanding of the changes. "
-        "Be strict: vague or incorrect answers should result in REQUEST CHANGES. "
-        "APPROVE only if the developer clearly understands the security implications and reasoning "
-        "behind their changes. "
+        "APPROVE if the developer shows reasonable awareness of the risk and the correct approach — "
+        "answers do not need to be perfectly articulated, just demonstrate they know what they changed and why. "
+        "REQUEST CHANGES only if answers are clearly wrong, missing the point, or show no understanding. "
         "Structure your feedback as bullet points — one bullet per question, starting each with '- '. "
         "Keep each bullet concise: state whether the answer was correct and why."
     ),
