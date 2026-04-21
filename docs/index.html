@@ -12,6 +12,7 @@
             background: #0a0a0a;
             color: #ededed;
             min-height: 100vh;
+            border-top: 2px solid #c0392b;
         }
 
         /* ── Top nav ── */
@@ -329,6 +330,16 @@
         .arch-text p + p { margin-top: 16px; }
         .arch-text strong { color: #aaa; }
 
+        /* ── Ralph ── */
+        .ralph-deco {
+            position: fixed;
+            left: 0;
+            top: 56px;
+            width: 200px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
         /* ── Intro ── */
         .intro {
             border-bottom: 1px solid #1f1f1f;
@@ -358,6 +369,13 @@
             margin-right: 4px;
             color: #666;
         }
+        .arch-principle {
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 1.1em;
+            color: #333;
+            text-align: center;
+            margin: 0 auto 28px;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
@@ -372,6 +390,8 @@
         <div class="tab" onclick="switchTab('architecture', this)">Architecture</div>
     </div>
 </nav>
+
+<img src="/static/ralph.png" class="ralph-deco" alt="" />
 
 <!-- ── Security Scanner tab ── -->
 <div class="page active" id="tab-scanner">
@@ -478,7 +498,7 @@
     <h2>Architecture</h2>
 
     <div class="intro">
-        <p>AI coding tools are making developers faster but creating a new risk — code gets shipped without genuine understanding. This is a PoC with two tools: a Security Scanner that detects leaked secrets and insecure patterns using regex detection and LLM verification, and a PR Review Agent designed as a CI gate that generates targeted questions about a git diff and only approves the PR once the answers show genuine understanding.</p>
+        <p class="arch-principle">/* simplicity &gt; complexity */</p>
         <p class="stack">
             <span>Python</span><span>FastAPI</span><span>Claude (Anthropic)</span><span>PydanticAI</span><span>Regex pipeline</span>
         </p>
