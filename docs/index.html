@@ -386,7 +386,7 @@
     <span class="nav-brand">Don't Vibe Code Please</span>
     <div class="nav-tabs">
         <div class="tab active" onclick="switchTab('scanner', this)">Security Scanner</div>
-        <div class="tab" onclick="switchTab('review', this)">PR Review Agent</div>
+        <div class="tab" onclick="switchTab('review', this)">Defend Your Code</div>
         <div class="tab" onclick="switchTab('architecture', this)">Architecture</div>
     </div>
 </nav>
@@ -444,7 +444,7 @@
 <!-- ── PR Review Agent tab ── -->
 <div class="page" id="tab-review">
 
-    <h2>PR Review Agent</h2>
+    <h2>Defend Your Code</h2>
     <p class="subtitle">Paste a git diff below. The agent generates targeted questions about your changes — answer them to get your PR approved.</p>
 
     <textarea id="diffInput" rows="12">diff --git a/pipeline/report.py b/pipeline/report.py
@@ -481,7 +481,7 @@
             <div class="verdict-author">
                 <div class="verdict-avatar">🤖</div>
                 <div>
-                    <div class="verdict-name">PR Review Agent</div>
+                    <div class="verdict-name">Defend Your Code</div>
                     <div class="verdict-label">reviewed just now</div>
                 </div>
             </div>
@@ -513,7 +513,7 @@ flowchart LR
     D -->|VerifiedFinding| E["report.py\ntable · JSON · Excel"]
     </div>
 
-    <p class="arch-label">PR Review Pipeline</p>
+    <p class="arch-label">Defend Your Code Pipeline</p>
     <div class="mermaid">
 flowchart LR
     A["CLI / Web UI"] --> B["Git Diff"]
@@ -525,7 +525,7 @@ flowchart LR
 
     <div class="arch-text">
         <p><strong>Scan pipeline</strong> runs in two stages: a fast regex pass across all files (6 rules covering AWS keys, GitHub tokens, DB credentials, insecure SSL, and exec() calls), then a single batched Claude call per repo with prompt caching to minimise latency and API cost. Each raw match (Finding) becomes a VerifiedFinding with a real/false-positive verdict, confidence level, and suggested fix.</p>
-        <p><strong>PR Review pipeline</strong> is a viva voce flow: the developer pastes a git diff, the questions_agent generates 2–3 targeted questions, the developer answers live, and the verdict_agent evaluates whether the answers show genuine understanding — returning APPROVE or REQUEST CHANGES with structured feedback.</p>
+        <p><strong>Defend Your Code pipeline</strong> is a viva voce flow: the developer pastes a git diff, the questions_agent generates 2–3 targeted questions, the developer answers live, and the verdict_agent evaluates whether the answers show genuine understanding — returning APPROVE or REQUEST CHANGES with structured feedback.</p>
     </div>
 
 </div>

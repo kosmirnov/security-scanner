@@ -103,7 +103,7 @@ python main.py scan ./my-repo --no-llm
 
 ---
 
-## PR Review Agent
+## Defend Your Code
 
 A viva voce code review flow — answer questions about your own diff to get it approved.
 
@@ -113,7 +113,7 @@ python main.py review
 
 The agent reads your last commit diff, generates 2–3 targeted questions about the security implications and design decisions, and returns `APPROVE` or `REQUEST CHANGES` based on your answers.
 
-Also available via the web UI (`PR Review Agent` tab) and API endpoints `POST /review/questions` and `POST /review/verdict`.
+Also available via the web UI (`Defend Your Code` tab) and API endpoints `POST /review/questions` and `POST /review/verdict`.
 
 ---
 
